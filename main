@@ -1,0 +1,31 @@
+import requests
+from token import authenticate
+
+client_id = 'xxxx'  
+client_secret = 'yyyy'  
+username = 'xxxx@yyyy.cl'
+password = 'xxxxyyyy.'
+token = authenticate('falabella.sharefile.com', client_id, client_secret, username, password)
+
+def download_file_from_sharefile(file_id, auth_token, download_path):
+    url = f"https://xxxxx.sf-api.com/sf/v3/items({file_id})/Download"
+    headers = {
+        "Authorization": f"Bearer {auth_token}"
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        with open(download_path, 'wb') as f:
+            f.write(response.content)
+        print(f"File downloaded successfully to {download_path}")
+    else:
+        raise Exception(f"Failed to download file: {response.text}")
+
+def main():
+    sharefile_file_id = 'fo78xxxx-xxxxxxx-xxxxxx-0cac961'  # Reemplaza con tu file_id
+    sharefile_auth_token = token
+    download_path = '/home/user/CARGA_SHAREFILE_A_NUBE/descargado.xlsx'  # Reemplaza con la ruta donde quieres guardar el archivo
+
+    download_file_from_sharefile(sharefile_file_id, sharefile_auth_token, download_path)
+
+if __name__ == '__main__':
+    main()
